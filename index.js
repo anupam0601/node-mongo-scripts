@@ -26,26 +26,37 @@ MongoClient.connect(url, function (err, db) {
 
     // Getting buglist data
 	    //collection.find().forEach(function(myDoc) { 
-	    collection.find().toArray(function(myDoc) {
+	    //collection.find({}, {"bugs" : 1,"_id":0}).toArray(function(err,result) {
+	    
+// Using distinct to get values for a particular field
+	    collection.distinct("bugs", function (err, result) {
 
-	    	console.log( "name: " + myDoc.cycle );
+	    	console.log(result);
 
-	    	// Pushing the data to an array and later we would push it to another collection
-	    	cycle.push(myDoc.cycle); 
-	    	bugs.push(myDoc.bugs);
+		      
+		      /*if (err) {
+		       	console.log(err);
 
-	    	// Printing the arrays
-	    	console.log(cycle);
-	    	console.log(bugs);
+		      	} 
 
-		    	// Getting linecollec data:
-		    	//linecollection.find().forEach(function(doc){
+		      	else if (result.length) {
+		        
+		        console.log('Found:', result);
+		         
+		         for (var key in result){
 
-		    	//	console.log("Line collection data =========>")
-		    	//	console.log(doc);
-		    	//	console.log("Buglist ++++++++++",bugs)
+		         	console.log(result[key]);
+		         }
+      	
+		      	} 
 
-		    	linecollection.update({"_id" : ObjectId("5716330d7745607233856db2")},{$push: {"data":10000}}, function(err,docs){
+		      	else {
+		        console.log('No document(s) found with defined "find" criteria!');
+		      	}*/
+
+
+		    	// Pushing the results in another collection
+		    	linecollection.update({"_id" : ObjectId("572f9d5bf4f230b01378d970")},{$push: {"data":result}}, function(err,docs){
 
 		    		if (err){
 		    			console.log(err);
@@ -60,23 +71,3 @@ MongoClient.connect(url, function (err, db) {
 		}); 	       
 });
 
-
-/*
-MongoClient.connect(url, function(err,db){
-	if (err) {
-		console.log(err)
-	} else {
-
-		//Get the collection
-		var linecoll = db.collection('linecoll');
-
-
-		linecoll.find().forEach(function(doc){
-			console.log("Line Collection data ------>")
-			console.log(doc);
-
-		db.close();
-
-		});
-	};
-}); */
