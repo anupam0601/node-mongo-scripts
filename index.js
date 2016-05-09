@@ -1,3 +1,6 @@
+#!/usr/local/bin/node
+
+
 //lets require/import the mongodb native drivers.
 var mongodb = require('mongodb');
 
@@ -9,65 +12,99 @@ var MongoClient = mongodb.MongoClient;
 // Connection URL. This is where your mongodb server is running.
 var url = 'mongodb://localhost:27017/testlist';
 
+// To access ObjectID we need the following module
 var ObjectId = require('mongodb').ObjectID;
 
-//Initializing empty arrays for cycle and bugs
-var cycle = [];
-var bugs = [];
 
+////////////////////////////////////////////////////////////////////
+// Below function will fetch and push data only for "bugs" field://
+//////////////////////////////////////////////////////////////////
 
 // Use connect method to connect to the Server
 MongoClient.connect(url, function (err, db) {
 
-    // Get the collection
+	
+    // Get the collections
     var collection = db.collection('buglist');
     var linecollection = db.collection('linecoll');
     
-
-    // Getting buglist data
-	    //collection.find().forEach(function(myDoc) { 
-	    //collection.find({}, {"bugs" : 1,"_id":0}).toArray(function(err,result) {
-	    
-// Using distinct to get values for a particular field
+	// Using distinct to get values for a particular field in an array
 	    collection.distinct("bugs", function (err, result) {
 
 	    	console.log(result);
 
-		      
-		      /*if (err) {
-		       	console.log(err);
+		      	var arrayLength = result.length;
 
-		      	} 
+		      	console.log('Last Value --------->>>>',result[arrayLength-1]);
 
-		      	else if (result.length) {
-		        
-		        console.log('Found:', result);
-		         
-		         for (var key in result){
+		      	// Running a for loop over the result and pushing the values to the collection 
+		      	for (var i=0; i<arrayLength; i++){
 
-		         	console.log(result[key]);
-		         }
-      	
-		      	} 
+		      		console.log(result[i]);
+			      	
+			      		linecollection.update({"_id" : ObjectId("5716330d7745607233856db2")},{$push: {"data":result[i]}}, function(err,docs){
 
-		      	else {
-		        console.log('No document(s) found with defined "find" criteria!');
-		      	}*/
+				    		if (err){
+				    			console.log(err);
 
+				    		} else {
+				    			console.log("pushing the data");
+				    		}
+				    		 
 
-		    	// Pushing the results in another collection
-		    	linecollection.update({"_id" : ObjectId("572f9d5bf4f230b01378d970")},{$push: {"data":result}}, function(err,docs){
+				    	db.close();
 
-		    		if (err){
-		    			console.log(err);
-		    		} else {
-		    			console.log("pushing the data");
-		    		}
-		    	});
-
-		    		
+				    	});	
+		      	}	
 		    		
 
-		}); 	       
+		}); 
+
 });
 
+
+////////////////////////////////////////////////////////////////////
+// Below function will fetch and push data only for "cycle" field://
+//////////////////////////////////////////////////////////////////
+
+// Use connect method to connect to the Server
+MongoClient.connect(url, function (err, db) {
+	
+    // Get the collections
+    var collection = db.collection('buglist');
+    var linecollection = db.collection('linecoll');
+    
+	// Using distinct to get values for a particular field in an array
+	    collection.distinct("cycle", function (err, result) {
+
+	    	console.log("Second Fetch =============>")
+	    	console.log(result);
+
+		      	var arrayLength = result.length;
+
+		      	console.log('Last Value --------->>>>',result[arrayLength-1]);
+
+		      	// Running a for loop over the result and pushing the values to the collection 
+		      	for (var i=0; i<arrayLength; i++){
+
+		      		console.log(result[i]);
+			      	
+			      		linecollection.update({"_id" : ObjectId("571632f07745607233856db1")},{$push: {"labels":result[i]}}, function(err,docs){
+
+				    		if (err){
+				    			console.log(err);
+
+				    		} else {
+				    			console.log("pushing the data");
+				    		}
+				    		 
+
+				    	db.close();
+
+				    	});	
+		      	}	
+		    		
+
+		}); 
+
+});
