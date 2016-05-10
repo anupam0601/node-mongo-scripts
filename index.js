@@ -38,24 +38,24 @@ MongoClient.connect(url, function (err, db) {
 		      	console.log('Last Value --------->>>>',result[arrayLength-1]);
 
 		      	// Running a for loop over the result and pushing the values to the collection 
-		      	for (var i=0; i<arrayLength; i++){
+		      	//for (var i=0; i<arrayLength; i++){
 
-		      		console.log(result[i]);
+		      		//console.log(result[i]);
 			      	
-			      		linecollection.update({"_id" : ObjectId("5716330d7745607233856db2")},{$push: {"data":result[i]}}, function(err,docs){
+		      	linecollection.update({"_id" : ObjectId("5716330d7745607233856db2")},{$push: {"data":result[arrayLength-1]}}, function(err,docs){
 
-				    		if (err){
-				    			console.log(err);
+			    		if (err){
+			    			console.log(err);
 
-				    		} else {
-				    			console.log("pushing the data");
-				    		}
-				    		 
+			    		} else {
+			    			console.log("pushing the data");
+			    		}
+			    		 
 
-				    	db.close();
+			    	db.close();
 
-				    	});	
-		      	}	
+				});	
+		      	//}	
 		    		
 
 		}); 
@@ -63,9 +63,9 @@ MongoClient.connect(url, function (err, db) {
 });
 
 
-////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 // Below function will fetch and push data only for "cycle" field://
-//////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 
 // Use connect method to connect to the Server
 MongoClient.connect(url, function (err, db) {
@@ -85,24 +85,25 @@ MongoClient.connect(url, function (err, db) {
 		      	console.log('Last Value --------->>>>',result[arrayLength-1]);
 
 		      	// Running a for loop over the result and pushing the values to the collection 
-		      	for (var i=0; i<arrayLength; i++){
+		      	//for (var i=0; i<arrayLength; i++){
 
-		      		console.log(result[i]);
+		      	//console.log(result[i]);
 			      	
-			      		linecollection.update({"_id" : ObjectId("571632f07745607233856db1")},{$push: {"labels":result[i]}}, function(err,docs){
+			    linecollection.update({"_id" : ObjectId("571632f07745607233856db1")},{$push: {"labels":result[arrayLength-1
+			    	]}}, function(err,docs){
 
-				    		if (err){
-				    			console.log(err);
+		    		if (err){
+		    			console.log(err);
 
-				    		} else {
-				    			console.log("pushing the data");
-				    		}
-				    		 
+		    		} else {
+		    			console.log("pushing the data");
+		    		}
+		    		 
 
-				    	db.close();
+		    	db.close();
 
-				    	});	
-		      	}	
+		    	});	
+		      	//}	end of for loop
 		    		
 
 		}); 
